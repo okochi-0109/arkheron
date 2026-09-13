@@ -81,6 +81,18 @@ Dexie.js（IndexedDB）で管理。定義は [src/db.ts](src/db.ts) 参照。
 - [src/hooks.ts](src/hooks.ts) の `useToast()`: 「保存しました」トースト表示の共通フック
 - [src/db.ts](src/db.ts) の `todayString()`: 試合作成フォームの日付初期値の共通ヘルパー
 
+## デプロイ（GitHub Pages）
+
+- 公開URL: **https://okochi-0109.github.io/arkheron/**
+- リポジトリ: https://github.com/okochi-0109/arkheron （public。個人アカウントの無料GitHub Pagesはpublicリポジトリのみ対応のため）
+- 仕組み: [.github/workflows/deploy.yml](.github/workflows/deploy.yml) が `main` ブランチへのpushをトリガーに `npm run build` → `actions/deploy-pages` で自動デプロイする（GitHub Actions経由のデプロイ。リポジトリ設定はSettings → Pages → Build and deployment → Source が「GitHub Actions」になっている）
+- **コード変更を公開に反映するには、`main` にpushするだけでよい**（`git add -A && git commit -m "..." && git push`）。手動でのビルド・アップロードは不要
+- [vite.config.ts](vite.config.ts) の `base` は本番ビルド時のみ `/arkheron/`（GitHub Pagesのプロジェクトサイトはこのサブパス配下で配信されるため）。開発サーバー（`npm run dev`）は影響を受けずルート`/`のまま
+- このマシンにはGit本体もGitHub CLIも標準ではインストールされていなかったため、管理者権限（UAC）が不要なポータブル版をそれぞれ導入した:
+  - Git: `%LOCALAPPDATA%\Programs\PortableGit`（`bin`・`cmd`をPATHに追加して使用）
+  - GitHub CLI: `%LOCALAPPDATA%\Programs\GitHubCLI\bin`
+  - 新しいPowerShellセッションでは毎回PATHへの追加が必要（永続化していないため）。認証情報は`gh auth login`で取得したトークンをGitの認証情報として使う設定済み（`gh auth setup-git`）なので、`git push`は`okochi-0109`のGitHubアカウントとして実行される
+
 ## 運用上の注意点
 
 - 生徒本人確認は自己申告制（認証なし）。他生徒のふりをしてスコアをつけることは技術的には可能だが、Phase1では運用でカバーする前提
